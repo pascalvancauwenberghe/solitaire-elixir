@@ -54,6 +54,8 @@ defmodule TableauTest do
     assert Solitaire.Tableau.can_drop?(tableau,Solitaire.Cards.new(:spades,11))
 
     assert ! Solitaire.Tableau.can_drop?(tableau,Solitaire.Cards.new(:hearts,11))
+    assert ! Solitaire.Tableau.can_drop?(tableau,Solitaire.Cards.new(:clubs,10))
+    assert ! Solitaire.Tableau.can_drop?(tableau,Solitaire.Cards.new(:clubs,13))
   end
 
 end
