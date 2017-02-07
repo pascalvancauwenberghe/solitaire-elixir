@@ -8,9 +8,20 @@ defmodule TableauTest do
     assert length(Solitaire.Tableau.down(tableau)) == 0
   end
 
-    test "an empty tableau has no up cards" do
+  test "an empty tableau has no up cards" do
     tableau = Solitaire.Tableau.new
 
     assert length(Solitaire.Tableau.up(tableau)) == 0
   end
+
+  test "add a set of down cards to the tableau. The top down card is turned up" do
+    tableau = Solitaire.Tableau.new
+      |> Solitaire.Tableau.add([Solitaire.Cards.new(:hearts,12) ,
+                                Solitaire.Cards.new(:diamonds,7) ,
+                                Solitaire.Cards.new(:spades,1) ])
+
+    assert Solitaire.Tableau.down(tableau) == [ Solitaire.Cards.new(:diamonds,7) , Solitaire.Cards.new(:spades,1) ]
+    assert Solitaire.Tableau.up(tableau)   == [ Solitaire.Cards.new(:hearts,12) ]
+  end
+
 end
