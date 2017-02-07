@@ -1,6 +1,7 @@
 defmodule SolitaireTest do
   use ExUnit.Case
-  doctest Solitaire
+  doctest Solitaire.Cards
+  doctest Solitaire.Deck
 
   test "there are four suits" do
     assert length(Solitaire.Cards.suits) == 4

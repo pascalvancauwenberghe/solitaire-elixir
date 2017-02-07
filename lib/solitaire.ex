@@ -2,6 +2,13 @@ defmodule Solitaire do
   @moduledoc """
   Documentation for Solitaire.
 
+
+  """
+
+  defmodule Cards do
+    @moduledoc """
+  A card has a suit and a value
+
   ## Examples
 
       iex> length(Solitaire.Cards.suits)
@@ -10,8 +17,6 @@ defmodule Solitaire do
       13
 
   """
-
-  defmodule Cards do
   
     @type suit :: :hearts | :diamonds | :spades | :clubs
     @type value :: Range.t(1,13)
@@ -50,8 +55,26 @@ defmodule Solitaire do
   end
 
   defmodule Deck do
+  @moduledoc """
+    A region contains a `Sudoku.Grid` and communicates results with neighbouring Regions 
+
+    It implementes the `Sudoku.Notifyable` behaviour
+
+      iex> deck = Solitaire.Deck.new
+      iex> length(deck)
+      52
+      iex> Solitaire.Deck.shuffle(deck,1234) == deck
+      false
+      iex> Solitaire.Deck.shuffle(deck,1234) == Solitaire.Deck.shuffle(deck,1234)
+      true
+      iex> Solitaire.Deck.shuffle(deck,1234) == Solitaire.Deck.shuffle(deck,12345)
+      false
+
+  """
     
-    @spec new :: [ Cards.t ]
+    @type t :: [ Cards.t ]
+
+    @spec new :: Deck.t
     @doc "Create a deck of all possible cards"
     def new do
       for suit <- Cards.suits, value <- Solitaire.Cards.values do
@@ -59,6 +82,8 @@ defmodule Solitaire do
       end
     end
 
+    @spec shuffle(Deck.t,integer) :: Deck.t
+    @doc "Shuffle a Deck based on a key. If you use the same key, you get the same randomized Deck"
     def shuffle(deck,key) do
       :rand.seed(:exsplus, {1, 2, key})
       Enum.shuffle(deck)
