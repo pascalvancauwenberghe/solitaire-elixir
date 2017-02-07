@@ -51,7 +51,7 @@ defmodule Solitaire do
     defp colour_of_suit(:hearts), do: :red
     defp colour_of_suit(:diamonds), do: :red
     defp colour_of_suit(:clubs), do: :black
-    defp colour_of_suit(:spade), do: :black
+    defp colour_of_suit(:spades), do: :black
 
     @spec suits :: [ suit ]
     @doc "List of possible card suits"
