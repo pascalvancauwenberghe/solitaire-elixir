@@ -3,6 +3,7 @@ defmodule FoundationTest do
   doctest Solitaire.Foundation
 
   alias Solitaire.Foundation, as: Foundation
+  alias Solitaire.Cards, as: Cards
 
   test "A new Foundation is empty" do
     foundation = Foundation.new
@@ -13,6 +14,8 @@ defmodule FoundationTest do
   test "Can drop an Ace on an empty Foundation" do
     foundation = Foundation.new
 
-    assert Foundation.can_drop?(foundation,Solitaire.Cards.new(:hearts,1))
+    for suit <- Cards.suits do
+      assert Foundation.can_drop?(foundation,Cards.new(suit,1))
+    end
   end
 end
