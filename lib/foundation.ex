@@ -26,4 +26,10 @@ defmodule Solitaire.Foundation do
     foundation
   end
 
+  @spec can_drop?(Solitaire.Foundation.t,Solitaire.Cards.t) :: boolean
+  @doc "Can drop an Ace on an ampty Foundation or a card on another if the same suit and value one higher"
+  def can_drop?([],card) do
+    Solitaire.Cards.value_of(card) == 1
+  end
+
 end

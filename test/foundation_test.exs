@@ -9,4 +9,10 @@ defmodule FoundationTest do
 
     assert length(Foundation.up(foundation)) == 0
   end
+
+  test "Can drop an Ace on an empty Foundation" do
+    foundation = Foundation.new
+
+    assert Foundation.can_drop?(foundation,Solitaire.Cards.new(:hearts,1))
+  end
 end
