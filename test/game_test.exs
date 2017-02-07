@@ -4,7 +4,7 @@ defmodule GameTest do
 
   alias Solitaire.Game, as: Game
 #  alias Solitaire.Foundation, as: Foundation
-#  alias Solitaire.Tableau, as: Tableau
+  alias Solitaire.Tableau, as: Tableau
   alias Solitaire.Deck, as: Deck
 #  alias Solitaire.Cards, as: Cards
 
@@ -22,11 +22,20 @@ defmodule GameTest do
     assert length(Game.foundations(game)) == 4
   end
 
-  test "A Game hascards to be dealt" do
+  test "A Game distributes deck cards over the tableaus" do
     deck = Deck.shuffle(Deck.new,1234)
     game = Game.new(deck)
 
-    assert length(Game.cards(game)) > 0
+    assert length(Game.cards(game)) == (52 - 1 - 2 - 3 - 4 - 5 - 6 - 7)
+    assert_tableau_has_cards(Game.tableaus(game),1)
   end
 
+  defp assert_tableau_has_cards([],_number) do
+    
+  end
+
+  defp assert_tableau_has_cards([tableau|rest],number_of_cards) do
+    assert length(Tableau.down(tableau)) + length(Tableau.up(tableau)) == number_of_cards
+    assert_tableau_has_cards(rest,number_of_cards+1)
+  end
 end

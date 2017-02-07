@@ -20,7 +20,8 @@ defmodule Solitaire.Game do
   @doc "Create a new empty Game"
   def new(deck) do
     tableaus = create_tableaus(deck)
-    foundations = create_foundations(deck)
+    foundations = create_foundations()
+    deck = Enum.drop(deck,1+2+3+4+5+6+7)
     { deck , tableaus , foundations }
   end
   
@@ -42,13 +43,23 @@ defmodule Solitaire.Game do
     foundations
   end
 
-  defp create_tableaus(_deck) do
-    for _tableau <- 1..7 do
+  defp create_tableaus(deck) do
+    tableaus = for _tableau <- 1..7 do
       Solitaire.Tableau.new
     end
+
+    distribute_cards(tableaus,deck,1)
   end
 
-  defp create_foundations(_deck) do
+  defp distribute_cards([],_deck,_number) do
+    []
+  end
+
+  defp distribute_cards([hd|tl],deck,number) do
+    [ Solitaire.Tableau.add(hd,Enum.take(deck,number)) | distribute_cards(tl,Enum.drop(deck,number),number+1) ]
+  end
+
+  defp create_foundations() do
     for _foundation <- 1..4 do
       Solitaire.Foundation.new
     end
