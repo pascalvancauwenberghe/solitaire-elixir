@@ -18,4 +18,11 @@ defmodule FoundationTest do
       assert Foundation.can_drop?(foundation,Cards.new(suit,1))
     end
   end
+
+  test "Drop an Ace onto an empty Foundation => Ace becomes top card" do
+     foundation = Foundation.new
+     |> Foundation.drop(Cards.new(:hearts,1))
+
+     assert Foundation.up(foundation) == [ Cards.new(:hearts,1) ]
+  end
 end
