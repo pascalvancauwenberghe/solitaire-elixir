@@ -66,4 +66,14 @@ defmodule TableauTest do
     
   end
 
+  test "When a cards is dropped onto an non-empty tableau it becomes the top up card" do
+    tableau = Solitaire.Tableau.new
+      |> Solitaire.Tableau.add([Solitaire.Cards.new(:hearts,12) ,
+                                Solitaire.Cards.new(:diamonds,7) ,
+                                Solitaire.Cards.new(:spades,1) ])
+      |> Solitaire.Tableau.drop(Solitaire.Cards.new(:spades,11))
+
+    assert Solitaire.Tableau.up(tableau) == [Solitaire.Cards.new(:spades,11),Solitaire.Cards.new(:hearts,12)]
+    
+  end
 end

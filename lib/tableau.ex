@@ -86,6 +86,11 @@
       make_consistent_tableau([], [ card ])
     end
 
+    @doc "Drop a card on a Tableau"
+    def drop({down,up}=_tableau,card) do
+      make_consistent_tableau(down , [card | up ])
+    end
+
 
   end
   
