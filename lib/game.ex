@@ -21,7 +21,13 @@ defmodule Solitaire.Game do
   def new(deck) do
     tableaus = create_tableaus(deck)
     foundations = create_foundations(deck)
-    { [] , tableaus , foundations }
+    { deck , tableaus , foundations }
+  end
+  
+  @spec cards(Solitaire.Game.t) :: [ Solitaire.Cards.t]
+  @doc "Returns the remaining cards in the game"
+  def cards({cards,_tableaus,_foundations}=_game) do
+    cards
   end
 
   @spec tableaus(Solitaire.Game.t) :: [ Solitaire.Tableau.t]
