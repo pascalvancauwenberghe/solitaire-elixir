@@ -19,7 +19,7 @@ defmodule Solitaire do
   """
   
     @type suit :: :hearts | :diamonds | :spades | :clubs
-    @type value :: Range.t(1,13)
+    @type value :: non_neg_integer
     @type card :: { suit , value }
     @type t :: card
 
