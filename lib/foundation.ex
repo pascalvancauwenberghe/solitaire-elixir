@@ -32,10 +32,19 @@ defmodule Solitaire.Foundation do
     Solitaire.Cards.value_of(card) == 1
   end
 
+  def can_drop?([hd|_tl]=_foundation,card) do
+    Solitaire.Cards.value_of(hd) + 1 == Solitaire.Cards.value_of(card) &&
+    Solitaire.Cards.suit_of(hd) == Solitaire.Cards.suit_of(card)
+  end
+
   @spec drop(Solitaire.Foundation.t,Solitaire.Cards.t) :: Solitaire.Foundation.t
   @doc "Drop a card onto a Foundation"
   def drop([]=_foundation,card) do
     [ card ]
+  end
+
+  def drop(foundation,card) do
+    [card | foundation]
   end
 
 end

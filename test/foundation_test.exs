@@ -25,4 +25,15 @@ defmodule FoundationTest do
 
      assert Foundation.up(foundation) == [ Cards.new(:hearts,1) ]
   end
+
+  test "Can drop cards onto foundation when same suit and following value" do
+     foundation = Foundation.new
+     |> Foundation.drop(Cards.new(:hearts,1))
+
+     Enum.reduce(2..13,foundation,fn(value,foundation) ->
+       card = Cards.new(:hearts,value)
+       assert Foundation.can_drop?(foundation,card)
+       Foundation.drop(foundation,card)
+       end)
+  end
 end
