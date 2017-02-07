@@ -18,6 +18,10 @@ defmodule SolitaireTest do
     assert Solitaire.Cards.value_of(card) == 12
   end
 
+  test "A suit has a colour" do
+    assert Solitaire.Cards.colour_of(Solitaire.Cards.new(:hearts,1)) == :red
+  end
+  
   test "A deck of cards contains 52 cards" do
     deck = Solitaire.Deck.new
 

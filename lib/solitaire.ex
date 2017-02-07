@@ -41,6 +41,19 @@ defmodule Solitaire do
       value
     end
 
+    def colour_of({suit,_value}) do
+      colour_of_suit(suit)
+    end
+
+    defp colour_of_suit(suit) do
+      case suit do
+        :hearts   -> :red
+        :diamonds -> :red
+        :clubs    -> :black
+        :spades   -> :black
+      end
+    end
+
     @spec suits :: [ suit ]
     @doc "List of possible card suits"
     def suits do
