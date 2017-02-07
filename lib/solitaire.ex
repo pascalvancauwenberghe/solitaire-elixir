@@ -59,6 +59,11 @@ defmodule Solitaire do
       end
     end
 
+    def shuffle(deck,key) do
+      :rand.seed(:exsplus, {1, 2, key})
+      Enum.shuffle(deck)
+    end
+
   end
 
 end

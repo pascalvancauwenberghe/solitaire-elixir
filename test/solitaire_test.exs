@@ -22,4 +22,13 @@ defmodule SolitaireTest do
 
     assert length(deck) == 52
   end
+
+  test "A deck can be shuffled deterministically" do
+    
+    deck = Solitaire.Deck.new
+
+    assert Solitaire.Deck.shuffle(deck,12345) == Solitaire.Deck.shuffle(deck,12345)
+    assert Solitaire.Deck.shuffle(deck,12345) != Solitaire.Deck.shuffle(deck,12346)
+  end
 end
+ 
