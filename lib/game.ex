@@ -20,7 +20,8 @@ defmodule Solitaire.Game do
   @doc "Create a new empty Game"
   def new(deck) do
     tableaus = create_tableaus(deck)
-    { [] , tableaus , [] }
+    foundations = create_foundations(deck)
+    { [] , tableaus , foundations }
   end
 
   @spec tableaus(Solitaire.Game.t) :: [ Solitaire.Tableau.t]
@@ -29,9 +30,21 @@ defmodule Solitaire.Game do
     tableaus
   end
 
+  @spec foundations(Solitaire.Game.t) :: [ Solitaire.Foundation.t]
+  @doc "Returns the list of 4 foundations in the game"
+  def foundations({_cards,_tableaus,foundations}=_game) do
+    foundations
+  end
+
   defp create_tableaus(_deck) do
     for _tableau <- 1..7 do
       Solitaire.Tableau.new
+    end
+  end
+
+  defp create_foundations(_deck) do
+    for _foundation <- 1..4 do
+      Solitaire.Foundation.new
     end
   end
 

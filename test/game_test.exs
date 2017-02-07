@@ -15,4 +15,11 @@ defmodule GameTest do
     assert length(Game.tableaus(game)) == 7
   end
 
+  test "A Game has 4 foundations" do
+    deck = Deck.shuffle(Deck.new,1234)
+    game = Game.new(deck)
+
+    assert length(Game.foundations(game)) == 4
+  end
+
 end
