@@ -16,6 +16,7 @@ defmodule Solitaire do
     @type suit :: :hearts | :diamonds | :spades | :clubs
     @type value :: Range.t(1,13)
     @type card :: { suit , value }
+    @type t :: card
 
     @spec new(suit,value) :: card 
     @doc "Make a card with given suit and value"
@@ -46,6 +47,18 @@ defmodule Solitaire do
     def values do
       Enum.to_list(1..13)
     end
+  end
+
+  defmodule Deck do
+    
+    @spec new :: [ Cards.t ]
+    @doc "Create a deck of all possible cards"
+    def new do
+      for suit <- Cards.suits, value <- Solitaire.Cards.values do
+        Cards.new(suit,value)
+      end
+    end
+
   end
 
 end

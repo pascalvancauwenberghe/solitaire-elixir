@@ -16,4 +16,10 @@ defmodule SolitaireTest do
     assert Solitaire.Cards.suit_of(card) == :hearts
     assert Solitaire.Cards.value_of(card) == 12
   end
+
+  test "A deck of cards contains 52 cards" do
+    deck = Solitaire.Deck.new
+
+    assert length(deck) == 52
+  end
 end
