@@ -68,5 +68,11 @@
       { [] , up }
     end  
 
+    @spec can_drop?(Solitaire.Tableau.t , Solitaire.Cards.t) :: boolean
+    @doc "Can drop Kings on an empty Tableau"
+    def can_drop?({_down,[]},card) do
+      Solitaire.Cards.value_of(card) == 13
+    end
+
   end
   

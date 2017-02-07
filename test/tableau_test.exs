@@ -36,4 +36,11 @@ defmodule TableauTest do
     assert Solitaire.Tableau.up(tableau)   == [ Solitaire.Cards.new(:hearts,12) ]
   end
 
+  test "Can drop a King on an empty tableau" do
+    tableau = Solitaire.Tableau.new
+    
+    for suit <- Solitaire.Cards.suits do
+      assert Solitaire.Tableau.can_drop?(tableau,Solitaire.Cards.new(suit,13))
+    end
+  end
 end
