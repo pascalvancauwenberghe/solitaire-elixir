@@ -27,7 +27,7 @@
     @spec new :: Solitaire.Tableau.t
     @doc "Creates a new empty tableau"
     def new do
-      {[] , [] }
+      make_consistent_tableau([] , [] )
     end
 
     @spec down(Solitaire.Tableau.t) :: [ Solitaire.Cards.t]
@@ -53,11 +53,19 @@
     @spec add(Solitaire.Tableau.t , [ Solitaire.Cards.t]) :: Solitaire.Tableau.t
     @doc "Add a set of cards to the down pile. If no cards are turned up, the top down card is turned up"
     def add({down,up}=_tableau,cards) do
-      ensure_one_card_up(down ++ cards , up )
+      make_consistent_tableau(down ++ cards , up )
     end
 
-    defp ensure_one_card_up([hd|tl],[]) do
+    defp make_consistent_tableau([hd|tl],[]) do
       { tl , [hd] }
+    end  
+
+    defp make_consistent_tableau(down,[hd|tl]) do
+      { down , [hd|tl] }
+    end  
+
+    defp make_consistent_tableau([],up) do
+      { [] , up }
     end  
 
   end

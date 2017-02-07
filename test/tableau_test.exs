@@ -24,4 +24,16 @@ defmodule TableauTest do
     assert Solitaire.Tableau.up(tableau)   == [ Solitaire.Cards.new(:hearts,12) ]
   end
 
+  test "When adding cards to a tableau with an up card, the up card is kept" do
+    tableau = Solitaire.Tableau.new
+      |> Solitaire.Tableau.add([Solitaire.Cards.new(:hearts,12) ,
+                                Solitaire.Cards.new(:diamonds,7) ,
+                                Solitaire.Cards.new(:spades,1) ])
+
+    tableau = Solitaire.Tableau.add(tableau,[Solitaire.Cards.new(:clubs,5) ])
+
+    assert Solitaire.Tableau.down(tableau) == [ Solitaire.Cards.new(:diamonds,7) , Solitaire.Cards.new(:spades,1),Solitaire.Cards.new(:clubs,5) ]
+    assert Solitaire.Tableau.up(tableau)   == [ Solitaire.Cards.new(:hearts,12) ]
+  end
+
 end
