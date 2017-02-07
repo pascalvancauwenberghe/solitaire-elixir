@@ -20,6 +20,7 @@ defmodule Solitaire do
   
     @type suit :: :hearts | :diamonds | :spades | :clubs
     @type value :: non_neg_integer
+    @type colour :: :red | :black
     @type card :: { suit , value }
     @type t :: card
 
@@ -41,6 +42,8 @@ defmodule Solitaire do
       value
     end
 
+    @spec colour_of(card) :: colour
+    @doc "Return the colour of the card"
     def colour_of({suit,_value}) do
       colour_of_suit(suit)
     end
