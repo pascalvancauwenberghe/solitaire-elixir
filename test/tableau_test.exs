@@ -43,4 +43,17 @@ defmodule TableauTest do
       assert Solitaire.Tableau.can_drop?(tableau,Solitaire.Cards.new(suit,13))
     end
   end
+
+  test "Can drop a cards on a non-empty tableau if it has a different colour and its value is one less than top up card" do
+    tableau = Solitaire.Tableau.new
+     |> Solitaire.Tableau.add([Solitaire.Cards.new(:hearts,12) ,
+                                Solitaire.Cards.new(:diamonds,7) ,
+                                Solitaire.Cards.new(:spades,1) ])
+
+    assert Solitaire.Tableau.can_drop?(tableau,Solitaire.Cards.new(:clubs,11))
+    assert Solitaire.Tableau.can_drop?(tableau,Solitaire.Cards.new(:spades,11))
+
+    assert ! Solitaire.Tableau.can_drop?(tableau,Solitaire.Cards.new(:hearts,11))
+  end
+
 end

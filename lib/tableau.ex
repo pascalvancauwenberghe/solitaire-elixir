@@ -74,5 +74,13 @@
       Solitaire.Cards.value_of(card) == 13
     end
 
+    @spec can_drop?(Solitaire.Tableau.t , Solitaire.Cards.t) :: boolean
+    @doc "Can drop a card on a non-empty Tableau if different colour and value one lower than top up card"
+    def can_drop?({_down,[hd|_tl]=_up},card) do
+      Solitaire.Cards.value_of(hd) == Solitaire.Cards.value_of(card) + 1 &&
+      Solitaire.Cards.colour_of(hd) != Solitaire.Cards.colour_of(card)
+    end
+
+
   end
   
