@@ -48,14 +48,10 @@ defmodule Solitaire do
       colour_of_suit(suit)
     end
 
-    defp colour_of_suit(suit) do
-      case suit do
-        :hearts   -> :red
-        :diamonds -> :red
-        :clubs    -> :black
-        :spades   -> :black
-      end
-    end
+    defp colour_of_suit(:hearts), do: :red
+    defp colour_of_suit(:diamonds), do: :red
+    defp colour_of_suit(:clubs), do: :black
+    defp colour_of_suit(:spade), do: :black
 
     @spec suits :: [ suit ]
     @doc "List of possible card suits"
