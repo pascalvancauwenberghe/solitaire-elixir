@@ -80,6 +80,12 @@
       Solitaire.Cards.colour_of(hd) != Solitaire.Cards.colour_of(card)
     end
 
+    @spec drop(Solitaire.Tableau.t , Solitaire.Cards.t) :: Solitaire.Tableau.t
+    @doc "Drop a King on an empty Tableau"
+    def drop({[],[]}=_tableau,{_suit,13}=card) do
+      make_consistent_tableau([], [ card ])
+    end
+
 
   end
   

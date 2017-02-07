@@ -58,4 +58,12 @@ defmodule TableauTest do
     assert ! Solitaire.Tableau.can_drop?(tableau,Solitaire.Cards.new(:clubs,13))
   end
 
+  test "When a King is dropped onto an empty tableau it becomes the top up card" do
+    tableau = Solitaire.Tableau.new
+    |> Solitaire.Tableau.drop(Solitaire.Cards.new(:spades,13))
+
+    assert Solitaire.Tableau.up(tableau) == [Solitaire.Cards.new(:spades,13)]
+    
+  end
+
 end
