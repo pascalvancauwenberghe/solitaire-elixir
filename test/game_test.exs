@@ -63,6 +63,7 @@ defmodule GameTest do
 
      fourth_tableau = Enum.at(Game.tableaus(game),3)
      assert length(Tableau.down(fourth_tableau)) == 2
+     assert Game.score(game) == 1
   end
 
   test "Can move cards between tableaus" do
