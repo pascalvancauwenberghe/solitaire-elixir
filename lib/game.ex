@@ -96,7 +96,8 @@ defmodule Solitaire.Game do
   @spec possible_moves(Game.t) :: [ Game.move ] 
   @doc "Returns a list of possible moves in the game as { from , from_index , to , to_index}"
   def possible_moves({_cards,tableaus,foundations}) do
-    solutions = find_moves_from_tableaus_to_foundations(tableaus,foundations)
+    solutions = find_moves_from_tableaus_to_foundations(tableaus,foundations) ++
+    find_moves_between_tableaus(tableaus)
     Enum.filter(solutions,&(&1 != nil))
   end
 
@@ -116,6 +117,18 @@ defmodule Solitaire.Game do
     for {index,card} <- cards do
       foundation = Enum.find_index(foundations,fn(foundation) -> Foundation.can_drop?(foundation,card) end)
       if foundation != nil, do: { :tableau , index , :foundation , foundation }, else: nil
+    end
+  end
+
+  defp find_moves_between_tableaus(tableaus) do
+    tableau_cards = bottom_cards_of_tableaus(tableaus)
+    move_cards_to_tableau(tableau_cards,tableaus)
+  end
+
+  defp move_cards_to_tableau(cards,tableaus) do
+    for {index,card} <- cards , tableau_index <- 0..6 do
+      tableau = Enum.at(tableaus,tableau_index)
+      if Tableau.can_drop?(tableau,card), do: { :tableau , index , :tableau , tableau_index }, else: nil
     end
   end
 

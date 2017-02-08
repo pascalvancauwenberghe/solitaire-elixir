@@ -47,8 +47,8 @@ defmodule GameTest do
 
      moves = Game.possible_moves(game)
 
-     assert length(moves) == 1
-     assert moves == [{:tableau, 3, :foundation, 0}]
+     assert length(moves) == 3
+     assert List.first(moves) == {:tableau, 3, :foundation, 0}
   end
 
   test "Move the Ace from tableau to foundation" do
@@ -63,6 +63,17 @@ defmodule GameTest do
 
      fourth_tableau = Enum.at(Game.tableaus(game),3)
      assert length(Tableau.down(fourth_tableau)) == 2
+  end
+
+  test "Can move cards between tableaus" do
+         game = test_game()
+
+     moves = Game.possible_moves(game)
+
+     assert length(moves) == 3
+     assert moves == [{:tableau, 3, :foundation, 0}, # Ace of diamonds to empty foundation
+                      {:tableau, 3, :tableau, 6},    # Ace of diamonds on 2 of spades
+                      {:tableau, 6, :tableau, 4}]    # 2 of spades to 3 of hearts
   end
 
   defp test_game() do
