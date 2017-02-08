@@ -16,6 +16,9 @@ defmodule Solitaire.Game do
   @opaque game :: { [ Solitaire.Cards.t ] , [ Solitaire.Tableau.t] , [ Solitaire.Foundation.t ] }
   @type t :: game
 
+  @type location :: :tableau | :foundation | :deck
+  @type move :: {location , non_neg_integer , location , non_neg_integer}
+
   @spec new(Solitaire.Deck.t) :: Solitaire.Game.t
   @doc "Create a new empty Game"
   def new(deck) do
@@ -65,6 +68,8 @@ defmodule Solitaire.Game do
     end
   end
 
+  @spec pretty_print(Solitaire.Game.t) :: :ok
+  @doc "Prints a readable version of the game"
   def pretty_print({cards,tableaus,foundations}) do
     IO.puts ""
     IO.inspect cards
@@ -74,10 +79,14 @@ defmodule Solitaire.Game do
     Enum.each(foundations,fn(foundation) -> IO.inspect(foundation) end)
   end
 
+  @spec score(Solitaire.Game.t) :: non_neg_integer
+  @doc "Calculate score of game == number of cards moved onto foundations"
   def score({_cards,_tableaus,foundations}) do
     Enum.reduce(foundations,0,fn(foundation,score) -> score + length(foundation) end)
   end
 
+  @spec possible_moves(Solitaire.Game.t) :: [ Solitaire.Game.move ] 
+  @doc "Returns a list of possible moves in the game as { from , from_index , to , to_index}"
   def possible_moves({_cards,tableaus,foundations}) do
     solutions = find_moves_from_tableaus_to_foundations(tableaus,foundations)
     Enum.filter(solutions,&(&1 != nil))
