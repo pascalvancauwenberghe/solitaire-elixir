@@ -65,4 +65,13 @@ defmodule Solitaire.Game do
     end
   end
 
+  def pretty_print({cards,tableaus,foundations}) do
+    IO.puts ""
+    IO.inspect cards
+    IO.puts "Tableaus"
+    Enum.each(tableaus,fn(tableau) -> IO.inspect(tableau) end)
+    IO.puts "Foundations"
+    Enum.each(foundations,fn(foundation) -> IO.inspect(foundation) end)
+  end
+
 end
