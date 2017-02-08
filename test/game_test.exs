@@ -40,15 +40,13 @@ defmodule GameTest do
     game = test_game()
 
     assert Game.score(game) == 0
-
-    Game.pretty_print(game)
   end
 
   test "Can move an Ace from a tableau to foundation" do
      game = test_game()
 
      moves = Game.possible_moves(game)
-     IO.inspect moves
+
      assert length(moves) == 1
      assert moves == [{:tableau, 3, :foundation, 0}]
   end
