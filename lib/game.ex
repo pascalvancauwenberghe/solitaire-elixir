@@ -16,11 +16,12 @@ defmodule Solitaire.Game do
   alias Solitaire.Game, as: Game
   alias Solitaire.Foundation, as: Foundation
   alias Solitaire.Tableau, as: Tableau
+  alias Solitaire.Stock, as: Stock
   alias Solitaire.Deck, as: Deck
   alias Solitaire.Cards, as: Cards
 
 
-  @opaque game :: { [ Cards.t ] , [ Tableau.t] , [ Foundation.t ] }
+  @opaque game :: { Stock.t  , [ Tableau.t] , [ Foundation.t ] }
   @type t :: game
 
   @type from_location :: :tableau | :foundation | :deck
@@ -33,24 +34,24 @@ defmodule Solitaire.Game do
     tableaus = create_tableaus(deck)
     foundations = create_foundations()
     deck = Enum.drop(deck,1+2+3+4+5+6+7)
-    { deck , tableaus , foundations }
+    { Stock.new(deck) , tableaus , foundations }
   end
   
   @spec cards(Game.t) :: [ Cards.t]
   @doc "Returns the remaining cards in the game"
-  def cards({cards,_tableaus,_foundations}=_game) do
-    cards
+  def cards({stock,_tableaus,_foundations}=_game) do
+    Stock.cards(stock)
   end
 
   @spec tableaus(Game.t) :: [ Tableau.t]
   @doc "Returns the list of 7 tableaus in the game"
-  def tableaus({_cards,tableaus,_foundations}=_game) do
+  def tableaus({_stock,tableaus,_foundations}=_game) do
     tableaus
   end
 
   @spec foundations(Game.t) :: [ Foundation.t]
   @doc "Returns the list of 4 foundations in the game"
-  def foundations({_cards,_tableaus,foundations}=_game) do
+  def foundations({_stock,_tableaus,foundations}=_game) do
     foundations
   end
 
@@ -78,9 +79,9 @@ defmodule Solitaire.Game do
 
   @spec pretty_print(Game.t) :: :ok
   @doc "Prints a readable version of the game"
-  def pretty_print({cards,tableaus,foundations}) do
+  def pretty_print({stock,tableaus,foundations}) do
     IO.puts ""
-    IO.inspect cards
+    IO.inspect stock
     IO.puts "Tableaus"
     Enum.each(tableaus,fn(tableau) -> IO.inspect(tableau) end)
     IO.puts "Foundations"
@@ -89,13 +90,13 @@ defmodule Solitaire.Game do
 
   @spec score(Game.t) :: non_neg_integer
   @doc "Calculate score of game == number of cards moved onto foundations"
-  def score({_cards,_tableaus,foundations}) do
+  def score({_stock,_tableaus,foundations}) do
     Enum.reduce(foundations,0,fn(foundation,score) -> score + length(foundation) end)
   end
 
   @spec possible_moves(Game.t) :: [ Game.move ] 
   @doc "Returns a list of possible moves in the game as { from , from_index , to , to_index}"
-  def possible_moves({_cards,tableaus,foundations}) do
+  def possible_moves({_stock,tableaus,foundations}) do
     solutions = find_moves_from_tableaus_to_foundations(tableaus,foundations) ++
     find_moves_between_tableaus(tableaus)
     Enum.filter(solutions,&(&1 != nil))
@@ -134,16 +135,16 @@ defmodule Solitaire.Game do
 
   @spec perform(Game.t,Game.move) :: Game.t
   @doc "Perform the given move on the game"
-  def perform({deck,tableaus,foundations},{:tableau , tableau_index, :foundation, foundation_index}) do
+  def perform({stock,tableaus,foundations},{:tableau , tableau_index, :foundation, foundation_index}) do
     tableau = Enum.at(tableaus,tableau_index)
     card = Tableau.bottom_card(tableau)
     tableaus = List.replace_at(tableaus,tableau_index,Tableau.take(tableau))
     foundation = Enum.at(foundations,foundation_index)
     foundations = List.replace_at(foundations,foundation_index,Foundation.drop(foundation,card))
-    {deck,tableaus,foundations}
+    {stock,tableaus,foundations}
   end
 
-  def perform({deck,tableaus,foundations},{:tableau , from_tableau_index, :tableau, to_tableau_index}) do
+  def perform({stock,tableaus,foundations},{:tableau , from_tableau_index, :tableau, to_tableau_index}) do
     tableau = Enum.at(tableaus,from_tableau_index)
     card = Tableau.bottom_card(tableau)
     tableaus = List.replace_at(tableaus,from_tableau_index,Tableau.take(tableau))
@@ -151,7 +152,7 @@ defmodule Solitaire.Game do
     tableau = Enum.at(tableaus,to_tableau_index)
     tableaus = List.replace_at(tableaus,to_tableau_index,Tableau.drop(tableau,card))
     
-    {deck,tableaus,foundations}
+    {stock,tableaus,foundations}
   end
 
 end
