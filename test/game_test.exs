@@ -8,6 +8,8 @@ defmodule GameTest do
   alias Solitaire.Deck, as: Deck
   alias Solitaire.Cards, as: Cards
 
+  @log 0
+
   test "A new Game has 7 tableaus" do
     game = test_game()
 
@@ -93,24 +95,47 @@ defmodule GameTest do
   end
 
   test "Run a complete game to check no scoring regressions" do
-     game = test_game()
-     # Game.pretty_print(game)
+    deck = Deck.shuffle(Deck.new,12345)
+    game = Game.new(deck)
 
-     moves = Game.possible_moves(game)
+    moves = Game.possible_moves(game)
+
+    show(game,moves)
      
-     game = play(game,moves)
+    game = play(game,moves)
 
-     assert Game.score(game) == 1
+    assert Game.score(game) == 2
   end
 
-  defp play(game,[]), do: game
+  defp play(game,[]) do
+    if Game.exhausted?(game) do
+      game
+    else
+      show("Turning over a card")
+      game = Game.turn(game)
+      moves = Game.possible_moves(game)
+      show(game,moves)
+      play(game,moves)
+    end
+  end
 
-  defp play(game,[move|_rest]=_moves) do
-    # IO.inspect(moves,label: "Moves")
+  defp play(game,[move|_rest]=moves) do
+    show(game,moves)
     game = Game.perform(game,move)
-    # Game.pretty_print(game)
     moves = Game.possible_moves(game)
     play(game,moves)
+  end
+
+  defp show(game,moves) do
+    if length(moves) > 0 && @log > 0 do
+      show("Game::")
+      Game.pretty_print(game)
+      IO.inspect(moves,label: "Moves")      
+    end
+  end
+
+  defp show(message) do
+    if @log > 0 && length(message) > 0, do: IO.puts message
   end
   
   defp test_game() do

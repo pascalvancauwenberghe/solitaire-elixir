@@ -34,13 +34,25 @@ defmodule Solitaire.Game do
     tableaus = create_tableaus(deck)
     foundations = create_foundations()
     deck = Enum.drop(deck,1+2+3+4+5+6+7)
-    { Stock.new(deck) , tableaus , foundations }
+    { Stock.turn(Stock.new(deck)) , tableaus , foundations }
   end
   
   @spec cards(Game.t) :: [ Cards.t]
   @doc "Returns the remaining cards in the game"
   def cards({stock,_tableaus,_foundations}=_game) do
     Stock.cards(stock)
+  end
+
+  @spec exhausted?(Game.t) :: boolean
+  @doc "Returns whether stock is exhausted"
+  def exhausted?({stock,_tableaus,_foundations}=_game) do
+    Stock.exhausted?(stock)
+  end
+
+  @spec turn(Game.t) :: Game.t
+  @doc "Turns over one card from down to up pile"
+  def turn({stock,tableaus,foundations}=_game) do
+    { Stock.turn(stock),tableaus,foundations }
   end
 
   @spec tableaus(Game.t) :: [ Tableau.t]
