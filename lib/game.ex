@@ -74,4 +74,8 @@ defmodule Solitaire.Game do
     Enum.each(foundations,fn(foundation) -> IO.inspect(foundation) end)
   end
 
+  def score({_cards,_tableaus,foundations}) do
+    Enum.reduce(foundations,0,fn(foundation,score) -> score + length(foundation) end)
+  end
+
 end

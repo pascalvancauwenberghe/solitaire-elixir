@@ -38,4 +38,11 @@ defmodule GameTest do
     assert length(Tableau.down(tableau)) + length(Tableau.up(tableau)) == number_of_cards
     assert_tableau_has_cards(rest,number_of_cards+1)
   end
+
+  test "A new game has a score of 0 == number of cards on foundations" do
+    deck = Deck.shuffle(Deck.new,1234)
+    game = Game.new(deck)
+
+    assert Game.score(game) == 0
+  end
 end
