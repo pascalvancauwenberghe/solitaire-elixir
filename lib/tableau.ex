@@ -56,6 +56,12 @@
       List.first(up(tableau))
     end
 
+    @spec take(Solitaire.Tableau.t) :: Solitaire.Tableau.t
+    @doc "Take away the bottom card of the Tableau"
+    def take({down,[_hd|tl]}) do
+      make_consistent_tableau(down , tl )
+    end
+
     @spec add(Solitaire.Tableau.t , [ Solitaire.Cards.t]) :: Solitaire.Tableau.t
     @doc "Add a set of cards to the down pile. If no cards are turned up, the top down card is turned up"
     def add({down,up}=_tableau,cards) do

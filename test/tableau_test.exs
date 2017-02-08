@@ -91,4 +91,13 @@ defmodule TableauTest do
     assert Solitaire.Tableau.bottom_card(tableau) == Solitaire.Cards.new(:hearts,12)
   end
 
+  test "Taking a card from a Tableau turns the next card up" do
+    tableau = Solitaire.Tableau.new
+      |> Solitaire.Tableau.add([Solitaire.Cards.new(:hearts,12) ,
+                                Solitaire.Cards.new(:diamonds,7) ,
+                                Solitaire.Cards.new(:spades,1) ])
+
+    tableau = Solitaire.Tableau.take(tableau)                           
+    assert Solitaire.Tableau.bottom_card(tableau) == Solitaire.Cards.new(:diamonds,7)
+  end
 end
