@@ -20,4 +20,22 @@ defmodule StockTest do
     assert length(Solitaire.Stock.up(stock)) == 1
     assert List.first(Solitaire.Stock.up(stock)) == top
   end
+
+  test "The stock is exhausted when all cards are turned over" do
+    deck = Solitaire.Deck.new
+    stock = Solitaire.Stock.new(deck)
+
+    stock = keep_turning(stock)
+    assert length(Solitaire.Stock.down(stock)) == 0
+    assert length(Solitaire.Stock.up(stock)) == 52
+    assert Solitaire.Stock.exhausted?(stock)
+  end
+
+  defp keep_turning(stock) do
+    if length(Solitaire.Stock.down(stock)) > 0 do
+      keep_turning(Solitaire.Stock.turn(stock))
+    else
+      stock
+    end
+  end
 end

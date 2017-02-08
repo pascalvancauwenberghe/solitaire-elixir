@@ -32,4 +32,8 @@
     def turn({[hd|tl],up}) do
       {tl , [hd | up] }
     end
+
+    def exhausted?({down,_up}) do
+      length(down) == 0
+    end
 end
