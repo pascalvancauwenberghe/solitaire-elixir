@@ -50,6 +50,12 @@
       up
     end
 
+    @spec bottom_card(Solitaire.Tableau.t) :: Solitaire.Cards.t | nil
+    @doc "Returns the lowest value visible card, if any. Else nil"
+    def bottom_card(tableau) do
+      List.first(up(tableau))
+    end
+
     @spec add(Solitaire.Tableau.t , [ Solitaire.Cards.t]) :: Solitaire.Tableau.t
     @doc "Add a set of cards to the down pile. If no cards are turned up, the top down card is turned up"
     def add({down,up}=_tableau,cards) do

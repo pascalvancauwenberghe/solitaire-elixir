@@ -76,4 +76,19 @@ defmodule TableauTest do
     assert Solitaire.Tableau.up(tableau) == [Solitaire.Cards.new(:spades,11),Solitaire.Cards.new(:hearts,12)]
     
   end
+
+  test "An empty tableau has no bottom card" do
+    tableau = Solitaire.Tableau.new
+    assert  Solitaire.Tableau.bottom_card(tableau) == nil
+  end
+
+  test "An filled tableau has a bottom card: the lowest value visible card" do
+    tableau = Solitaire.Tableau.new
+     |> Solitaire.Tableau.add([Solitaire.Cards.new(:hearts,12) ,
+                                Solitaire.Cards.new(:diamonds,7) ,
+                                Solitaire.Cards.new(:spades,1) ])
+
+    assert Solitaire.Tableau.bottom_card(tableau) == Solitaire.Cards.new(:hearts,12)
+  end
+
 end
