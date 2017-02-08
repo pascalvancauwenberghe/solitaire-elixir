@@ -101,8 +101,8 @@ defmodule GameTest do
     game = play(game,moves)
 
     assert length(Enum.at(Game.foundations(game),0)) == 1
-    assert length(Enum.at(Game.foundations(game),1)) == 2
-    assert length(Enum.at(Game.foundations(game),2)) == 4
+    assert length(Enum.at(Game.foundations(game),1)) == 4
+    assert length(Enum.at(Game.foundations(game),2)) == 5
   end
 
   test "Run a complete game to check no scoring regressions" do
@@ -114,7 +114,7 @@ defmodule GameTest do
      
     game = play(game,moves)
 
-    assert Game.score(game) == 7
+    assert Game.score(game) == 10
   end
 
   defp play(game,[]) do
@@ -130,7 +130,7 @@ defmodule GameTest do
   end
 
   defp play(game,[move|_rest]=moves) do
-    show(game,moves)
+    show(game,moves) 
     game = Game.perform(game,move)
     moves = Game.possible_moves(game)
     play(game,moves)
