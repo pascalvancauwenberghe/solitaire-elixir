@@ -28,4 +28,8 @@
     @spec up(Solitaire.Stock.t) :: [ Solitaire.Cards.t]
     @doc "Return the list of all up cards"
     def up({_down,up}), do: up
+
+    def turn({[hd|tl],up}) do
+      {tl , [hd | up] }
+    end
 end
