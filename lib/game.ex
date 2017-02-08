@@ -143,4 +143,15 @@ defmodule Solitaire.Game do
     {deck,tableaus,foundations}
   end
 
+  def perform({deck,tableaus,foundations},{:tableau , from_tableau_index, :tableau, to_tableau_index}) do
+    tableau = Enum.at(tableaus,from_tableau_index)
+    card = Tableau.bottom_card(tableau)
+    tableaus = List.replace_at(tableaus,from_tableau_index,Tableau.take(tableau))
+
+    tableau = Enum.at(tableaus,to_tableau_index)
+    tableaus = List.replace_at(tableaus,to_tableau_index,Tableau.drop(tableau,card))
+    
+    {deck,tableaus,foundations}
+  end
+
 end

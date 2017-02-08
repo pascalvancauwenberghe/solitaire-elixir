@@ -66,7 +66,7 @@ defmodule GameTest do
   end
 
   test "Can move cards between tableaus" do
-         game = test_game()
+     game = test_game()
 
      moves = Game.possible_moves(game)
 
@@ -76,6 +76,23 @@ defmodule GameTest do
                       {:tableau, 6, :tableau, 4}]    # 2 of spades to 3 of hearts
   end
 
+  test "Move cards between tableaus" do
+     game = test_game()
+
+     moves = Game.possible_moves(game)
+     spades2_to_hearts3 = Enum.at(moves,2)
+
+     game = Game.perform(game,spades2_to_hearts3)
+
+
+     firth_tableau = Enum.at(Game.tableaus(game),4)
+     seventh_tableau = Enum.at(Game.tableaus(game),6)
+
+     assert length(Tableau.up(firth_tableau)) == 2
+     assert Tableau.bottom_card(seventh_tableau) == Cards.new(:spades,11)
+
+  end
+  
   defp test_game() do
     deck = Deck.shuffle(Deck.new,1234)
     Game.new(deck)
