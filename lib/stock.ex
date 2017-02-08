@@ -40,4 +40,8 @@
     def exhausted?({down,_up}=_stock) do
       length(down) == 0
     end
+
+    @spec cards(Solitaire.Stock.t) :: [ Solitaire.Cards.t]
+    @doc "Returns the list of all down and up cards"
+    def cards({down,up}=_stock), do: down ++ up
 end

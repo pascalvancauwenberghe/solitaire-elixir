@@ -4,7 +4,6 @@ defmodule StockTest do
 
   alias Solitaire.Stock, as: Stock
   alias Solitaire.Deck, as: Deck
-  alias Solitaire.Cards, as: Cards
 
   test "The initial card contains all down, no up cards" do
     deck = Deck.new
@@ -42,4 +41,16 @@ defmodule StockTest do
       stock
     end
   end
+
+  test "The stock cards are the combination of up and down pile" do
+    deck = Deck.new
+    stock = Stock.new(deck)
+
+    stock = Stock.turn(stock)
+    stock = Stock.turn(stock)
+    stock = Stock.turn(stock)
+
+    assert length(Stock.cards(stock)) == 52
+  end
+
 end
