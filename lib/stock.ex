@@ -23,17 +23,21 @@
 
     @spec down(Solitaire.Stock.t) :: [ Solitaire.Cards.t]
     @doc "Return the list of all down cards"
-    def down({down,_up}), do: down
+    def down({down,_up}=_stock), do: down
 
     @spec up(Solitaire.Stock.t) :: [ Solitaire.Cards.t]
     @doc "Return the list of all up cards"
-    def up({_down,up}), do: up
+    def up({_down,up}=_stock), do: up
 
-    def turn({[hd|tl],up}) do
+    @spec turn(Solitaire.Stock.t) :: Solitaire.Stock.t
+    @doc "Turn over one card from down to up pile"
+    def turn({[hd|tl],up}=_stock) do
       {tl , [hd | up] }
     end
 
-    def exhausted?({down,_up}) do
+    @spec exhausted?(Solitaire.Stock.t) :: boolean
+    @doc "Stock is exhausted when there are no more down cards"
+    def exhausted?({down,_up}=_stock) do
       length(down) == 0
     end
 end
