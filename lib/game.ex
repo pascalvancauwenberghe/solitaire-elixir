@@ -108,8 +108,9 @@ defmodule Solitaire.Game do
 
   @spec possible_moves(Game.t) :: [ Game.move ] 
   @doc "Returns a list of possible moves in the game as { from , from_index , to , to_index}"
-  def possible_moves({_stock,tableaus,foundations}) do
+  def possible_moves({stock,tableaus,foundations}) do
     solutions = find_moves_from_tableaus_to_foundations(tableaus,foundations) ++
+    find_moves_from_deck_to_foundations(Stock.top_card(stock),foundations) ++
     find_moves_between_tableaus(tableaus)
     Enum.filter(solutions,&(&1 != nil))
   end
@@ -145,6 +146,13 @@ defmodule Solitaire.Game do
     end
   end
 
+  defp find_moves_from_deck_to_foundations(nil,_foundations), do: []
+
+  defp find_moves_from_deck_to_foundations(card,foundations) do
+    foundation = Enum.find_index(foundations,fn(foundation) -> Foundation.can_drop?(foundation,card) end)
+    if foundation != nil, do: [{ :deck , 0 , :foundation , foundation }], else: []
+  end
+
   @spec perform(Game.t,Game.move) :: Game.t
   @doc "Perform the given move on the game"
   def perform({stock,tableaus,foundations},{:tableau , tableau_index, :foundation, foundation_index}) do
@@ -164,6 +172,14 @@ defmodule Solitaire.Game do
     tableau = Enum.at(tableaus,to_tableau_index)
     tableaus = List.replace_at(tableaus,to_tableau_index,Tableau.drop(tableau,card))
     
+    {stock,tableaus,foundations}
+  end
+
+  def perform({stock,tableaus,foundations},{:deck , _, :foundation, foundation_index}) do
+    card = Stock.top_card(stock)
+    stock = Stock.take(stock)
+    foundation = Enum.at(foundations,foundation_index)
+    foundations = List.replace_at(foundations,foundation_index,Foundation.drop(foundation,card))
     {stock,tableaus,foundations}
   end
 

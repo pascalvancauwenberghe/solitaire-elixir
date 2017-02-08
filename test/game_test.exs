@@ -94,9 +94,19 @@ defmodule GameTest do
      assert Tableau.bottom_card(seventh_tableau) == Cards.new(:spades,11)
   end
 
+  test "Can move aces from deck to foundation" do
+    game = test_game()
+    moves = Game.possible_moves(game)
+
+    game = play(game,moves)
+
+    assert length(Enum.at(Game.foundations(game),0)) == 1
+    assert length(Enum.at(Game.foundations(game),1)) == 2
+    assert length(Enum.at(Game.foundations(game),2)) == 4
+  end
+
   test "Run a complete game to check no scoring regressions" do
-    deck = Deck.shuffle(Deck.new,12345)
-    game = Game.new(deck)
+    game = test_game()
 
     moves = Game.possible_moves(game)
 
@@ -104,7 +114,7 @@ defmodule GameTest do
      
     game = play(game,moves)
 
-    assert Game.score(game) == 2
+    assert Game.score(game) == 7
   end
 
   defp play(game,[]) do
@@ -135,7 +145,7 @@ defmodule GameTest do
   end
 
   defp show(message) do
-    if @log > 0 && length(message) > 0, do: IO.puts message
+    if @log > 0 && String.length(message) > 0, do: IO.puts message
   end
   
   defp test_game() do
