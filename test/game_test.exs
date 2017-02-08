@@ -3,10 +3,10 @@ defmodule GameTest do
   doctest Solitaire.Game
 
   alias Solitaire.Game, as: Game
-#  alias Solitaire.Foundation, as: Foundation
+  alias Solitaire.Foundation, as: Foundation
   alias Solitaire.Tableau, as: Tableau
   alias Solitaire.Deck, as: Deck
-#  alias Solitaire.Cards, as: Cards
+  alias Solitaire.Cards, as: Cards
 
   test "A new Game has 7 tableaus" do
     game = test_game()
@@ -49,6 +49,20 @@ defmodule GameTest do
 
      assert length(moves) == 1
      assert moves == [{:tableau, 3, :foundation, 0}]
+  end
+
+  test "Move the Ace from tableau to foundation" do
+     game = test_game()
+
+     [move|_rest] = Game.possible_moves(game)
+     game = Game.perform(game,move)
+
+     first_foundation = List.first(Game.foundations(game))
+     assert length(first_foundation) == 1
+     assert List.first(Foundation.up(first_foundation)) == Cards.new(:diamonds,1)
+
+     fourth_tableau = Enum.at(Game.tableaus(game),3)
+     assert length(Tableau.down(fourth_tableau)) == 2
   end
 
   defp test_game() do

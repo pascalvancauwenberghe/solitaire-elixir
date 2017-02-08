@@ -112,4 +112,13 @@ defmodule Solitaire.Game do
     end
   end
 
+  def perform({deck,tableaus,foundations},{:tableau , tableau_index, :foundation, foundation_index}) do
+    tableau = Enum.at(tableaus,tableau_index)
+    card = Solitaire.Tableau.bottom_card(tableau)
+    tableaus = List.replace_at(tableaus,tableau_index,Solitaire.Tableau.take(tableau))
+    foundation = Enum.at(foundations,foundation_index)
+    foundations = List.replace_at(foundations,foundation_index,Solitaire.Foundation.drop(foundation,card))
+    {deck,tableaus,foundations}
+  end
+
 end
