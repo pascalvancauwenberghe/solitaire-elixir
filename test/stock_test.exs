@@ -53,4 +53,20 @@ defmodule StockTest do
     assert length(Stock.cards(stock)) == 52
   end
 
+  test "When no up cards, the top card is nil" do
+    deck = Deck.new
+    stock = Stock.new(deck)
+
+    assert Stock.top_card(stock) == nil
+  end
+
+  test "When a card is turned over it becomes the top card" do
+    deck = Deck.new
+    stock = Stock.new(deck)
+    top = List.first(Stock.down(stock))
+
+    stock = Stock.turn(stock)
+    assert Stock.top_card(stock) == top
+  end
+
 end

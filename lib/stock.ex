@@ -44,4 +44,10 @@
     @spec cards(Solitaire.Stock.t) :: [ Solitaire.Cards.t]
     @doc "Returns the list of all down and up cards"
     def cards({down,up}=_stock), do: down ++ up
+
+    @spec top_card(Solitaire.Stock.t) :: Solitaire.Cards.t | nil
+    @doc "Returns the top up card, if any. Else nil"
+    def top_card({_down,[]}), do: nil
+
+    def top_card({_down,[hd|_tl]}), do: hd
 end
