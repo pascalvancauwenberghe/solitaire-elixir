@@ -112,6 +112,8 @@ defmodule Solitaire.Game do
     end
   end
 
+  @spec perform(Solitaire.Game.t,Solitaire.Game.move) :: Solitaire.Game.t
+  @doc "Perform the given move on the game"
   def perform({deck,tableaus,foundations},{:tableau , tableau_index, :foundation, foundation_index}) do
     tableau = Enum.at(tableaus,tableau_index)
     card = Solitaire.Tableau.bottom_card(tableau)
