@@ -85,11 +85,10 @@ defmodule GameTest do
 
      game = Game.perform(game,spades2_to_hearts3)
 
-
-     firth_tableau = Enum.at(Game.tableaus(game),4)
+     fifth_tableau = Enum.at(Game.tableaus(game),4)
      seventh_tableau = Enum.at(Game.tableaus(game),6)
 
-     assert length(Tableau.up(firth_tableau)) == 2
+     assert length(Tableau.up(fifth_tableau)) == 2
      assert Tableau.bottom_card(seventh_tableau) == Cards.new(:spades,11)
 
   end
