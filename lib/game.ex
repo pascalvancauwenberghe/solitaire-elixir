@@ -16,8 +16,9 @@ defmodule Solitaire.Game do
   @opaque game :: { [ Solitaire.Cards.t ] , [ Solitaire.Tableau.t] , [ Solitaire.Foundation.t ] }
   @type t :: game
 
-  @type location :: :tableau | :foundation | :deck
-  @type move :: {location , non_neg_integer , location , non_neg_integer}
+  @type from_location :: :tableau | :foundation | :deck
+  @type to_location :: :tableau | :foundation 
+  @type move :: {from_location , non_neg_integer , to_location , non_neg_integer}
 
   @spec new(Solitaire.Deck.t) :: Solitaire.Game.t
   @doc "Create a new empty Game"
