@@ -24,4 +24,8 @@
     @spec down(Solitaire.Stock.t) :: [ Solitaire.Cards.t]
     @doc "Return the list of all down cards"
     def down({down,_up}), do: down
+
+    @spec up(Solitaire.Stock.t) :: [ Solitaire.Cards.t]
+    @doc "Return the list of all up cards"
+    def up({_down,up}), do: up
 end
