@@ -9,22 +9,19 @@ defmodule GameTest do
 #  alias Solitaire.Cards, as: Cards
 
   test "A new Game has 7 tableaus" do
-    deck = Deck.shuffle(Deck.new,1234)
-    game = Game.new(deck)
+    game = test_game()
 
     assert length(Game.tableaus(game)) == 7
   end
 
   test "A Game has 4 foundations" do
-    deck = Deck.shuffle(Deck.new,1234)
-    game = Game.new(deck)
+    game = test_game()
 
     assert length(Game.foundations(game)) == 4
   end
 
   test "A Game distributes deck cards over the tableaus" do
-    deck = Deck.shuffle(Deck.new,1234)
-    game = Game.new(deck)
+    game = test_game()
 
     assert length(Game.cards(game)) == (52 - 1 - 2 - 3 - 4 - 5 - 6 - 7)
     assert_tableau_has_cards(Game.tableaus(game),1)
@@ -40,9 +37,14 @@ defmodule GameTest do
   end
 
   test "A new game has a score of 0 == number of cards on foundations" do
-    deck = Deck.shuffle(Deck.new,1234)
-    game = Game.new(deck)
+    game = test_game()
 
     assert Game.score(game) == 0
   end
+
+  defp test_game() do
+    deck = Deck.shuffle(Deck.new,1234)
+    Game.new(deck)
+  end
+
 end
