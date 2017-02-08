@@ -69,4 +69,15 @@ defmodule StockTest do
     assert Stock.top_card(stock) == top
   end
 
+  test "When a card is taken, the card below it becomes the top card" do
+    deck = Deck.new
+    stock = Stock.new(deck)
+    top = List.first(Stock.down(stock))
+
+    stock = Stock.turn(stock)
+    stock = Stock.turn(stock)
+    stock = Stock.take(stock)
+    assert Stock.top_card(stock) == top
+  end
+
 end

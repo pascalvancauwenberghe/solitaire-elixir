@@ -50,4 +50,10 @@
     def top_card({_down,[]}), do: nil
 
     def top_card({_down,[hd|_tl]}), do: hd
+
+    @spec take(Solitaire.Stock.t) :: Solitaire.Stock.t
+    @doc "Take the top up card away, if any"
+    def take({down,[]}), do: {down,[]}
+
+    def take({down,[_hd|tl]}), do: {down,tl}
 end
