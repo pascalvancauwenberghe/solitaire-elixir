@@ -90,7 +90,27 @@ defmodule GameTest do
 
      assert length(Tableau.up(fifth_tableau)) == 2
      assert Tableau.bottom_card(seventh_tableau) == Cards.new(:spades,11)
+  end
 
+  test "Run a complete game to check no scoring regressions" do
+     game = test_game()
+     # Game.pretty_print(game)
+
+     moves = Game.possible_moves(game)
+     
+     game = play(game,moves)
+
+     assert Game.score(game) == 1
+  end
+
+  defp play(game,[]), do: game
+
+  defp play(game,[move|_rest]=_moves) do
+    # IO.inspect(moves,label: "Moves")
+    game = Game.perform(game,move)
+    # Game.pretty_print(game)
+    moves = Game.possible_moves(game)
+    play(game,moves)
   end
   
   defp test_game() do
