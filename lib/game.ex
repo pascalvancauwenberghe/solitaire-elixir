@@ -84,26 +84,22 @@ defmodule Solitaire.Game do
   end
 
   defp find_moves_from_tableaus_to_foundations(tableaus,foundations) do
-    for tableau <- 0..6 do
-      move_from_tableau_to_foundation(tableaus,tableau,foundations)
-    end
+    tableau_cards = bottom_cards_of_tableaus(tableaus)
+    move_cards_to_foundation(tableau_cards,foundations)
   end
 
-  defp move_from_tableau_to_foundation(tableaus,index,foundations) do
-    tableau = Enum.at(tableaus,index)
-    up = Solitaire.Tableau.up(tableau)
-    if length(up) > 0 do
-      bottom_card = List.first(up)
-      foundation = Enum.find_index(foundations,fn(foundation) -> Solitaire.Foundation.can_drop?(foundation,bottom_card) end)
-      if foundation != nil do
-        { :tableau , index , :foundation , foundation }
-      else
-        nil
-      end
-    else
-      nil
+  defp bottom_cards_of_tableaus(tableaus) do
+    cards = for tableau <- 0..6 do
+      { tableau , Solitaire.Tableau.bottom_card(Enum.at(tableaus,tableau)) }
     end
+    Enum.filter(cards,fn({_index,card}) -> card != nil end)
   end
 
+  defp move_cards_to_foundation(cards,foundations) do
+    for {index,card} <- cards do
+      foundation = Enum.find_index(foundations,fn(foundation) -> Solitaire.Foundation.can_drop?(foundation,card) end)
+      if foundation != nil, do: { :tableau , index , :foundation , foundation }, else: nil
+    end
+  end
 
 end
