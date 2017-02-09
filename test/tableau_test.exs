@@ -100,4 +100,16 @@ defmodule TableauTest do
     tableau = Solitaire.Tableau.take(tableau)                           
     assert Solitaire.Tableau.bottom_card(tableau) == Solitaire.Cards.new(:diamonds,7)
   end
+
+  test "A filled tableau has a top card: the highest visible card" do
+    tableau = Solitaire.Tableau.new
+     |> Solitaire.Tableau.add([Solitaire.Cards.new(:hearts,12) ,
+                                Solitaire.Cards.new(:diamonds,7) ,
+                                Solitaire.Cards.new(:spades,1) ])
+     |> Solitaire.Tableau.drop(Solitaire.Cards.new(:spades, 11))
+
+    assert Solitaire.Tableau.top_card(tableau) == Solitaire.Cards.new(:hearts,12)
+    assert Solitaire.Tableau.bottom_card(tableau) == Solitaire.Cards.new(:spades,11)
+
+  end
 end

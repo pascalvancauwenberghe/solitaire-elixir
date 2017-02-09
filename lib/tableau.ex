@@ -56,6 +56,12 @@
       List.first(up(tableau))
     end
 
+    @spec top_card(Solitaire.Tableau.t) :: Solitaire.Cards.t | nil
+    @doc "Returns the highest value visible card, if any. Else nil"
+    def top_card(tableau) do
+      List.last(up(tableau))
+    end
+
     @spec take(Solitaire.Tableau.t) :: Solitaire.Tableau.t
     @doc "Take away the bottom card of the Tableau"
     def take({down,[_hd|tl]}) do
