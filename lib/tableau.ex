@@ -121,6 +121,19 @@
       make_consistent_tableau(down , [card | up ])
     end
 
+    @spec drop_cards(Solitaire.Tableau.t , [Solitaire.Cards.t]) :: Solitaire.Tableau.t
+    @doc "Drop a pile of up cards from another tableau"
+    def drop_cards(tableau,cards) do
+      drop_cards_on(tableau,Enum.reverse(cards))
+    end
+
+    defp drop_cards_on(tableau,[]) do
+      tableau
+    end
+
+    defp drop_cards_on({down,up}=_tableau,[card|rest]) do
+      drop_cards_on(make_consistent_tableau(down , [card | up ]),rest)
+    end
 
   end
   

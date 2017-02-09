@@ -69,7 +69,7 @@ defmodule TableauTest do
     
   end
 
-  test "When a cards is dropped onto an non-empty tableau it becomes the top up card" do
+  test "When a card is dropped onto an non-empty tableau it becomes the top up card" do
     tableau = Tableau.new
       |> Tableau.add([Cards.new(:hearts,12) ,
                       Cards.new(:diamonds,7) ,
@@ -77,6 +77,17 @@ defmodule TableauTest do
       |> Tableau.drop(Cards.new(:spades,11))
 
     assert Tableau.up(tableau) == [Cards.new(:spades,11),Cards.new(:hearts,12)]
+    
+  end
+
+  test "When a pile of cards is dropped onto an non-empty tableau it lands on the top up card" do
+    tableau = Tableau.new
+      |> Tableau.add([Cards.new(:hearts,12) ,
+                      Cards.new(:diamonds,7) ,
+                      Cards.new(:spades,1) ])
+      |> Tableau.drop_cards([Cards.new(:clubs,9),Cards.new(:hearts, 10),Cards.new(:spades,11)])
+
+    assert Tableau.up(tableau) == [Cards.new(:clubs,9),Cards.new(:hearts, 10),Cards.new(:spades,11),Cards.new(:hearts,12)]
     
   end
 
