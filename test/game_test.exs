@@ -1,5 +1,5 @@
 defmodule GameTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   doctest Solitaire.Game
 
   alias Solitaire.Game, as: Game
@@ -7,8 +7,6 @@ defmodule GameTest do
   alias Solitaire.Tableau, as: Tableau
   alias Solitaire.Deck, as: Deck
   alias Solitaire.Cards, as: Cards
-
-  @log 0
 
   test "A new Game has 7 tableaus" do
     game = test_game()
@@ -50,7 +48,7 @@ defmodule GameTest do
      moves = Game.possible_moves(game)
 
      assert length(moves) == 3
-     assert List.first(moves) == {:tableau, 3, :foundation, 0}
+     assert List.first(moves) == {:tableau, 3, :foundation, 0, {:diamonds, 1}}
   end
 
   test "Move the Ace from tableau to foundation" do
@@ -74,9 +72,9 @@ defmodule GameTest do
      moves = Game.possible_moves(game)
 
      assert length(moves) == 3
-     assert moves == [{:tableau, 3, :foundation, 0}, # Ace of diamonds to empty foundation
-                      {:tableau, 3, :tableau, 6},    # Ace of diamonds on 2 of spades
-                      {:tableau, 6, :tableau, 4}]    # 2 of spades to 3 of hearts
+     assert moves == [{:tableau, 3, :foundation, 0, {:diamonds, 1}}, # Ace of diamonds to empty foundation
+                      {:tableau, 3, :tableau, 6, {:diamonds, 1}},    # Ace of diamonds on 2 of spades
+                      {:tableau, 6, :tableau, 4, {:spades, 2}}]      # 2 of spades to 3 of hearts
   end
 
   test "Move cards between tableaus" do
@@ -98,56 +96,24 @@ defmodule GameTest do
     game = test_game()
     moves = Game.possible_moves(game)
 
-    game = play(game,moves)
+    game = Player.play(game,moves)
 
     assert length(Enum.at(Game.foundations(game),0)) == 1
     assert length(Enum.at(Game.foundations(game),1)) == 4
     assert length(Enum.at(Game.foundations(game),2)) == 5
   end
 
-  test "Run a complete game to check no scoring regressions" do
-    game = test_game()
-
+  test "Game doesn't get in loop moving cards back and forth between piles" do
+    deck = Deck.shuffle(Deck.new,1)
+    game = Game.new(deck)
     moves = Game.possible_moves(game)
+    game = Player.play(game,moves)
 
-    show(game,moves)
-     
-    game = play(game,moves)
-
-    assert Game.score(game) == 10
+    score = Game.score(game)
+    assert score == 8
   end
 
-  defp play(game,[]) do
-    if Game.exhausted?(game) do
-      game
-    else
-      show("Turning over a card")
-      game = Game.turn(game)
-      moves = Game.possible_moves(game)
-      show(game,moves)
-      play(game,moves)
-    end
-  end
-
-  defp play(game,[move|_rest]=moves) do
-    show(game,moves) 
-    game = Game.perform(game,move)
-    moves = Game.possible_moves(game)
-    play(game,moves)
-  end
-
-  defp show(game,moves) do
-    if length(moves) > 0 && @log > 0 do
-      show("Game::")
-      Game.pretty_print(game)
-      IO.inspect(moves,label: "Moves")      
-    end
-  end
-
-  defp show(message) do
-    if @log > 0 && String.length(message) > 0, do: IO.puts message
-  end
-  
+    
   defp test_game() do
     deck = Deck.shuffle(Deck.new,1234)
     Game.new(deck)
