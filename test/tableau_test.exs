@@ -110,6 +110,11 @@ defmodule TableauTest do
 
     assert Solitaire.Tableau.top_card(tableau) == Solitaire.Cards.new(:hearts,12)
     assert Solitaire.Tableau.bottom_card(tableau) == Solitaire.Cards.new(:spades,11)
-
   end
+
+  test "An empty tableau has no top card" do
+    tableau = Solitaire.Tableau.new
+    assert  Solitaire.Tableau.top_card(tableau) == nil
+  end
+
 end
