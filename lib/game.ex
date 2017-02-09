@@ -26,7 +26,7 @@ defmodule Solitaire.Game do
 
   @type from_location :: :tableau | :foundation | :deck
   @type to_location :: :tableau | :foundation 
-  @type move :: {from_location , non_neg_integer , to_location , non_neg_integer}
+  @type move :: {from_location , non_neg_integer , to_location , non_neg_integer, Cards.t }
 
   @spec new(Deck.t) :: Game.t
   @doc "Create a new empty Game"
