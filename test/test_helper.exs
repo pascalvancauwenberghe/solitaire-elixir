@@ -9,14 +9,15 @@ defmodule Player do
 
   def play_games(range) do
      games = for nb <- range do
+       #IO.inspect {:Playing , nb }
        deck = Deck.shuffle(Deck.new,nb)
        game = Game.new(deck)
        moves = Game.possible_moves(game)
        game = play(game,moves)
-       score = Game.score(game)
-       if score == 52 do
-         IO.inspect { nb , score , game }
-       end
+       #score = Game.score(game)
+       #if score == 52 do
+       #  IO.inspect { nb , score , game }
+       #end
        game
     end
     Enum.reduce(games,0,fn(game,score) -> score + Game.score(game) end)

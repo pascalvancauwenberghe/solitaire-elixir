@@ -7,7 +7,7 @@ defmodule PerformanceTest1 do
   test "Run a complete game to check no scoring regressions 1..2000" do
     score = Player.play_games(1..2000)
 
-    assert score == 11763
+    assert score == 14020
   end
 end
 
@@ -18,7 +18,7 @@ defmodule PerformanceTest2 do
   test "Run a complete game to check no scoring regressions 2001..4000" do
     score = Player.play_games(2001..4000)
 
-    assert score == 11746
+    assert score == 14060
   end
 end
 
@@ -29,7 +29,7 @@ defmodule PerformanceTest3 do
   test "Run a complete game to check no scoring regressions 4001..6000" do
     score = Player.play_games(4001..6000)
 
-    assert score == 11980
+    assert score == 14402
   end
 end
 
@@ -40,7 +40,7 @@ defmodule PerformanceTest4 do
   test "Run a complete game to check no scoring regressions 6001..8000" do
     score = Player.play_games(6001..8000)
 
-    assert score == 11798
+    assert score == 14497
   end
 end
 
@@ -51,7 +51,7 @@ defmodule PerformanceTest5 do
   test "Run a complete game to check no scoring regressions 8001..10000" do
     score = Player.play_games(8001..10000)
 
-    assert score == 11910
+    assert score == 14291
   end
 end
 
@@ -62,6 +62,6 @@ defmodule PerformanceTest6 do
   test "Run a complete game to check no scoring regressions 10001..12000" do
     score = Player.play_games(10001..12000)
 
-    assert score == 11574
+    assert score == 14593
   end
 end
