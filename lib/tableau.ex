@@ -80,6 +80,14 @@
       make_consistent_tableau(down , tl )
     end
 
+    
+    @spec take_all(Solitaire.Tableau.t) :: Solitaire.Tableau.t
+    @doc "Take away all the up cards of the Tableau"
+    def take_all({down,_}) do
+      make_consistent_tableau(down , [] )
+    end
+
+
     @spec add(Solitaire.Tableau.t , [ Solitaire.Cards.t]) :: Solitaire.Tableau.t
     @doc "Add a set of cards to the down pile. If no cards are turned up, the top down card is turned up"
     def add({down,up}=_tableau,cards) do

@@ -105,13 +105,24 @@ defmodule TableauTest do
     assert Tableau.bottom_card(tableau) == Cards.new(:hearts,12)
   end
 
-  test "Taking a card from a Tableau turns the next card up" do
+  test "Taking a card from a Tableau turns the next down card up" do
     tableau = Tableau.new
       |> Tableau.add([Cards.new(:hearts,12) ,
                       Cards.new(:diamonds,7) ,
                       Cards.new(:spades,1) ])
 
     tableau = Tableau.take(tableau)                           
+    assert Tableau.bottom_card(tableau) == Cards.new(:diamonds,7)
+  end
+
+  test "Taking all cards from a Tableau turns the next down card up" do
+    tableau = Tableau.new
+      |> Tableau.add([Cards.new(:hearts,12) ,
+                      Cards.new(:diamonds,7) ,
+                      Cards.new(:spades,1) ])
+      |> Tableau.drop(Cards.new(:spades, 11))
+
+    tableau = Tableau.take_all(tableau)                           
     assert Tableau.bottom_card(tableau) == Cards.new(:diamonds,7)
   end
 
