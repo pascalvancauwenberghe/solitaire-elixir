@@ -5,6 +5,7 @@ defmodule Player do
   alias Solitaire.Game, as: Game
   alias Solitaire.Deck, as: Deck
 
+  @log 0
 
   def play_games(range) do
      games = for nb <- range do
