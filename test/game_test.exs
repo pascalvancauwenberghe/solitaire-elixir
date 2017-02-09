@@ -110,7 +110,7 @@ defmodule GameTest do
     game = Player.play(game,moves)
 
     score = Game.score(game)
-    assert score == 19
+    assert score == 9
   end
 
     

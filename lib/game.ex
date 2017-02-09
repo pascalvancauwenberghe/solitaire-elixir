@@ -148,9 +148,11 @@ defmodule Solitaire.Game do
 
   defp move_cards_to_tableau(cards,tableaus) do
     for {index,card} <- cards , tableau_index <- 0..6 do
+      from_tableau = Enum.at(tableaus,index)
+      from_height = Tableau.cards_down(from_tableau)
       tableau = Enum.at(tableaus,tableau_index)
       to_height = Tableau.cards_up(tableau)
-      if Tableau.can_drop?(tableau,card) && to_height > 0 , do: { :tableau , index , :tableau , tableau_index, card }, else: nil
+      if Tableau.can_drop?(tableau,card) && (to_height > 0 || from_height > 0), do: { :tableau , index , :tableau , tableau_index, card }, else: nil
     end
   end
 
