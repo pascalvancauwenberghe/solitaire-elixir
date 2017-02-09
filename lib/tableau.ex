@@ -40,6 +40,12 @@
       down
     end
 
+    @spec cards_down(Solitaire.Tableau.t) :: non_neg_integer
+    @doc "The number of cards facing down in the tableau"
+    def cards_down({down,_up}) do
+      length(down)
+    end
+
     @spec up(Solitaire.Tableau.t) :: [ Solitaire.Cards.t]
     @doc "Returns the pile of up cards in the tableau"
     def up(tableau) do
@@ -48,6 +54,12 @@
 
     defp up_of({_down,up}) do
       up
+    end
+
+    @spec cards_up(Solitaire.Tableau.t) :: non_neg_integer
+    @doc "The number of cards facing up in the tableau"
+    def cards_up({_down,up}) do
+      length(up)
     end
 
     @spec bottom_card(Solitaire.Tableau.t) :: Solitaire.Cards.t | nil

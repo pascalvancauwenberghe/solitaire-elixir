@@ -120,4 +120,20 @@ defmodule TableauTest do
     assert  Tableau.top_card(tableau) == nil
   end
 
+  test "An empty tableau has size 0" do
+    tableau = Tableau.new
+    assert  Tableau.cards_up(tableau) == 0
+    assert  Tableau.cards_down(tableau) == 0
+  end
+
+  test "A filled tableau has non-zero size" do
+   tableau = Tableau.new
+     |> Tableau.add([Cards.new(:hearts,12) ,
+                     Cards.new(:diamonds,7) ,
+                     Cards.new(:spades,1) ])
+
+    assert Tableau.cards_up(tableau) == 1
+    assert Tableau.cards_down(tableau) == 2
+  end
+
 end
