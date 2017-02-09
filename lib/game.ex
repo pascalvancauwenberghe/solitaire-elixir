@@ -135,16 +135,23 @@ defmodule Solitaire.Game do
   end
 
   defp find_moves_between_tableaus(tableaus) do
-    tableau_cards = bottom_cards_of_tableaus(tableaus)
+    tableau_cards = top_cards_of_tableaus(tableaus)
     move_cards_to_tableau(tableau_cards,tableaus)
+  end
+
+  defp top_cards_of_tableaus(tableaus) do
+    cards = for tableau <- 0..6 do
+      { tableau , Tableau.top_card(Enum.at(tableaus,tableau)) }
+    end
+    Enum.filter(cards,fn({_index,card}) -> card != nil end)
   end
 
   defp move_cards_to_tableau(cards,tableaus) do
     for {index,card} <- cards , tableau_index <- 0..6 do
       from_tableau = Enum.at(tableaus,index)
-      from_height = length(Tableau.up(from_tableau))
+      from_height = Tableau.cards_up(from_tableau)
       tableau = Enum.at(tableaus,tableau_index)
-      to_height = length(Tableau.up(tableau))
+      to_height = Tableau.cards_up(tableau)
       if Tableau.can_drop?(tableau,card) && to_height >= from_height , do: { :tableau , index , :tableau , tableau_index, card }, else: nil
     end
   end
@@ -178,11 +185,12 @@ defmodule Solitaire.Game do
 
   def perform({stock,tableaus,foundations},{:tableau , from_tableau_index, :tableau, to_tableau_index,_card_to_move}) do
     tableau = Enum.at(tableaus,from_tableau_index)
-    card = Tableau.bottom_card(tableau)
+    cards = Tableau.up(tableau)
     tableaus = List.replace_at(tableaus,from_tableau_index,Tableau.take(tableau))
 
     tableau = Enum.at(tableaus,to_tableau_index)
-    tableaus = List.replace_at(tableaus,to_tableau_index,Tableau.drop(tableau,card))
+    tableau = Tableau.drop_cards(tableau,cards)
+    tableaus = List.replace_at(tableaus,to_tableau_index,tableau)
     
     {stock,tableaus,foundations}
   end
