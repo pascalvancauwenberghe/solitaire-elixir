@@ -73,15 +73,16 @@ defmodule GameTest do
 
      assert length(moves) == 3
      assert moves == [{:tableau, 3, :foundation, 0, {:diamonds, 1}}, # Ace of diamonds to empty foundation
-                      {:tableau, 3, :tableau, 6, {:diamonds, 1}},    # Ace of diamonds on 2 of spades
-                      {:tableau, 6, :tableau, 4, {:spades, 2}}]      # 2 of spades to 3 of hearts
+                      {:tableau, 6, :tableau, 4, {:spades, 2}},      # 2 of spades to 3 of hearts
+                      {:tableau, 3, :tableau, 6, {:diamonds, 1}}     # Ace of diamonds on 2 of spades
+                     ] 
   end
 
   test "Move cards between tableaus" do
      game = test_game()
 
      moves = Game.possible_moves(game)
-     spades2_to_hearts3 = Enum.at(moves,2)
+     spades2_to_hearts3 = Enum.at(moves,1)
 
      game = Game.perform(game,spades2_to_hearts3)
 

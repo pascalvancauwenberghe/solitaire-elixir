@@ -140,7 +140,7 @@ defmodule Solitaire.Game do
   end
 
   defp top_cards_of_tableaus(tableaus) do
-    cards = for tableau <- 0..6 do
+    cards = for tableau <- 6..0 do
       { tableau , Tableau.top_card(Enum.at(tableaus,tableau)) }
     end
     Enum.filter(cards,fn({_index,card}) -> card != nil end)
