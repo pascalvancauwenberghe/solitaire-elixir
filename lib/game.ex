@@ -8,6 +8,23 @@ defmodule Solitaire.Game do
       iex> game = Solitaire.Game.new(deck)
       iex> length(Solitaire.Game.tableaus(game))
       7
+      iex> moves = Solitaire.Game.possible_moves(game)
+      iex> moves
+      [{:tableau, 3, :foundation, 0, {:diamonds, 1}},{:tableau, 6, :tableau, 4, {:spades, 2}},{:tableau, 3, :tableau, 6, {:diamonds, 1}}]
+      iex> game = Solitaire.Game.perform(game,List.first(moves))
+      iex> moves = Solitaire.Game.possible_moves(game)
+      iex> moves
+      [{:tableau, 6, :tableau, 4, {:spades, 2}}]
+      iex> game = Solitaire.Game.perform(game,List.first(moves))
+      iex> moves = Solitaire.Game.possible_moves(game)
+      iex> moves
+      []
+      iex> game = Solitaire.Game.turn(game)
+      iex> moves = Solitaire.Game.possible_moves(game)
+      iex> moves
+      [{:deck, 0, :tableau, 0, {:hearts, 7}}]
+
+
 
 
 
@@ -21,11 +38,15 @@ defmodule Solitaire.Game do
   alias Solitaire.Cards, as: Cards
 
 
+  @typedoc "The state of the Solitaire Game: a deck, 7 tableaus and 4 foundations"
   @opaque game :: { Stock.t  , [ Tableau.t] , [ Foundation.t ] }
   @type t :: game
 
+  @typedoc "A move can be from a tableau or from the deck"
   @type from_location :: :tableau | :foundation | :deck
+  @typedoc "A move can from a tableau or the deck"
   @type to_location :: :tableau | :foundation 
+  @typedoc "Describes moving cards from one location to the other"
   @type move :: {from_location , non_neg_integer , to_location , non_neg_integer, Cards.t }
 
   @spec new(Deck.t) :: Game.t
@@ -91,7 +112,7 @@ defmodule Solitaire.Game do
 
   @spec pretty_print(Game.t) :: :ok
   @doc "Prints a readable version of the game"
-  def pretty_print({stock,tableaus,foundations}) do
+  def pretty_print({stock,tableaus,foundations}=_game) do
     IO.inspect stock
     IO.puts "Tableaus"
     Enum.each(tableaus,fn(tableau) -> IO.inspect(tableau) end)
@@ -101,13 +122,13 @@ defmodule Solitaire.Game do
 
   @spec score(Game.t) :: non_neg_integer
   @doc "Calculate score of game == number of cards moved onto foundations"
-  def score({_stock,_tableaus,foundations}) do
+  def score({_stock,_tableaus,foundations}=_game) do
     Enum.reduce(foundations,0,fn(foundation,score) -> score + length(foundation) end)
   end
 
   @spec possible_moves(Game.t) :: [ Game.move ] 
   @doc "Returns a list of possible moves in the game as { from , from_index , to , to_index}"
-  def possible_moves({stock,tableaus,foundations}) do
+  def possible_moves({stock,tableaus,foundations}=_game) do
     solutions = find_moves_from_tableaus_to_foundations(tableaus,foundations) ++
     find_moves_from_deck_to_foundations(Stock.top_card(stock),foundations) ++
     find_moves_between_tableaus(tableaus) ++
@@ -174,7 +195,7 @@ defmodule Solitaire.Game do
 
   @spec perform(Game.t,Game.move) :: Game.t
   @doc "Perform the given move on the game"
-  def perform({stock,tableaus,foundations},{:tableau , tableau_index, :foundation, foundation_index,_card_to_move}) do
+  def perform({stock,tableaus,foundations}=_game,{:tableau , tableau_index, :foundation, foundation_index,_card_to_move}) do
     tableau = Enum.at(tableaus,tableau_index)
     card = Tableau.bottom_card(tableau)
     tableaus = List.replace_at(tableaus,tableau_index,Tableau.take(tableau))
@@ -183,7 +204,7 @@ defmodule Solitaire.Game do
     {stock,tableaus,foundations}
   end
 
-  def perform({stock,tableaus,foundations},{:tableau , from_tableau_index, :tableau, to_tableau_index,_card_to_move}) do
+  def perform({stock,tableaus,foundations}=_game,{:tableau , from_tableau_index, :tableau, to_tableau_index,_card_to_move}) do
     tableau = Enum.at(tableaus,from_tableau_index)
     cards = Tableau.up(tableau)
     tableaus = List.replace_at(tableaus,from_tableau_index,Tableau.take_all(tableau))
@@ -195,7 +216,7 @@ defmodule Solitaire.Game do
     {stock,tableaus,foundations}
   end
 
-  def perform({stock,tableaus,foundations},{:deck , _, :foundation, foundation_index,_card_to_move}) do
+  def perform({stock,tableaus,foundations}=_game,{:deck , _, :foundation, foundation_index,_card_to_move}) do
     card = Stock.top_card(stock)
     stock = Stock.take(stock)
     foundation = Enum.at(foundations,foundation_index)
@@ -203,7 +224,7 @@ defmodule Solitaire.Game do
     {stock,tableaus,foundations}
   end
 
-  def perform({stock,tableaus,foundations},{:deck , _, :tableau, to_tableau_index,_card_to_move}) do
+  def perform({stock,tableaus,foundations}=_game,{:deck , _, :tableau, to_tableau_index,_card_to_move}) do
     card = Stock.top_card(stock)
     stock = Stock.take(stock)
 
