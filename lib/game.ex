@@ -49,8 +49,9 @@ defmodule Solitaire.Game do
   @typedoc "Describes moving cards from one location to the other"
   @type move :: {from_location , non_neg_integer , to_location , non_neg_integer, Cards.t }
 
-  @type error_type :: :tableau_mismatch | :foundation_mismatch
-  @type validation_error :: { error_type , non_neg_integer , Cards.t , Cards.t }
+  @typedoc "A game can be invalid because 1) cards on tableau are in wrong order/colour 2) cards on foundation are in wrong order/colour or 3) foundation doesn't start with ace'"
+  @type error_type :: :tableau_mismatch | :foundation_mismatch | :foundation_base_mismatch
+  @type validation_error :: { error_type , non_neg_integer , Cards.t , Cards.t | nil }
 
   @spec new(Deck.t) :: Game.t
   @doc "Create a new empty Game"
@@ -64,7 +65,22 @@ defmodule Solitaire.Game do
   @spec validate(Game.t) :: [ validation_error ] 
   @doc "Validates that the game follows solitaire rules. Returns list of found errors"
   def validate({_stock,tableaus,foundations}=_game) do
-    validate_tableaus(tableaus,0) ++ validate_foundations(foundations,0)
+    validate_tableaus(tableaus,0) ++ validate_foundations(foundations,0) ++ validate_foundation_starts_with_ace(foundations,0)
+  end
+
+  @spec validate_foundation_starts_with_ace([Foundation.t],non_neg_integer) :: [validation_error]
+  defp validate_foundation_starts_with_ace([],_index), do: []
+
+  defp validate_foundation_starts_with_ace([foundation|tl],index) do
+    starts_with_ace(Foundation.up(foundation),index) ++ validate_foundation_starts_with_ace(tl,index+1)
+  end
+
+  @spec starts_with_ace([Cards.t],non_neg_integer) :: [ validation_error ]
+  defp starts_with_ace([],_index), do: []
+
+  defp starts_with_ace([_ht|_tl]=cards,index) do
+    card = List.last(cards)
+    if Cards.value_of(card) == 1, do: [] , else: [{:foundation_base_mismatch , index, card, nil} ]
   end
 
   @spec validate_foundations([Foundation.t],non_neg_integer) :: [validation_error]

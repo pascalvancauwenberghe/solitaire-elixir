@@ -152,6 +152,18 @@ defmodule GameTest do
     errors = Game.validate(game)
     assert errors == [{:foundation_mismatch, 0, Cards.new(:diamonds, 3), Cards.new(:hearts, 1) }]
   end
+
+  test "Detect foundations not built on ace" do
+    deck = Deck.shuffle(Deck.new,1)
+    game = Game.new(deck)
+
+    game = Game.turn(game)
+    game = Game.perform(game,{:deck , 0, :foundation, 0, {Cards.new(:hearts,1)}})
+    game = Game.perform(game,{:deck , 0, :foundation, 1, {Cards.new(:diamonds,3)}})
+
+    errors = Game.validate(game)
+    assert errors == [{:foundation_base_mismatch, 1, Cards.new(:diamonds, 3), nil }]
+  end
     
   defp test_game() do
     deck = Deck.shuffle(Deck.new,1234)
