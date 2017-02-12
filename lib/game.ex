@@ -43,7 +43,7 @@ defmodule Solitaire.Game do
   @type t :: game
 
   @typedoc "A move can be from a tableau or from the deck"
-  @type from_location :: :tableau | :foundation | :deck
+  @type from_location :: :tableau | :deck
   @typedoc "A move can from a tableau or the deck"
   @type to_location :: :tableau | :foundation 
   @typedoc "Describes moving cards from one location to the other"
