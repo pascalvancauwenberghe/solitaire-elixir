@@ -42,7 +42,12 @@ defmodule Player do
     show(game,moves) 
     game = Game.perform(game,move)
     moves = Game.possible_moves(game)
-    play(game,moves)
+    game = play(game,moves)
+    errors = Game.validate(game)
+    if errors != [] do
+      IO.inspect { game,errors }
+    end
+    game
   end
 
   defp show(game,moves) do
