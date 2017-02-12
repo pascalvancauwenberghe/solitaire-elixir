@@ -43,7 +43,7 @@ defmodule Player do
     game = Game.perform(game,move)
     moves = Game.possible_moves(game)
     game = play(game,moves)
-    errors = Game.validate(game)
+    errors = Game.Debug.validate(game)
     if errors != [] do
       IO.inspect { game,errors }
     end

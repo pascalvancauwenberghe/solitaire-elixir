@@ -118,13 +118,13 @@ defmodule GameTest do
     deck = Deck.shuffle(Deck.new,1)
     game = Game.new(deck)
 
-    errors = Game.validate(game)
+    errors = Game.Debug.validate(game)
     assert errors == []
 
     moves = Game.possible_moves(game)
     game = Player.play(game,moves)
 
-    errors = Game.validate(game)
+    errors = Game.Debug.validate(game)
     assert errors == []
   end
 
@@ -136,7 +136,7 @@ defmodule GameTest do
     game = Game.turn(game)
     game = Game.perform(game,{:deck , 0, :tableau, 3, {Cards.new(:hearts,1)}})
 
-    errors = Game.validate(game)
+    errors = Game.Debug.validate(game)
     assert errors == [{:tableau_mismatch, 0, Cards.new(:diamonds, 3), Cards.new(:diamonds, 1) },
                       {:tableau_mismatch, 3, Cards.new(:hearts, 1),   Cards.new(:spades, 1)}]
   end
@@ -149,7 +149,7 @@ defmodule GameTest do
     game = Game.perform(game,{:deck , 0, :foundation, 0, {Cards.new(:hearts,1)}})
     game = Game.perform(game,{:deck , 0, :foundation, 0, {Cards.new(:diamonds,3)}})
 
-    errors = Game.validate(game)
+    errors = Game.Debug.validate(game)
     assert errors == [{:foundation_mismatch, 0, Cards.new(:diamonds, 3), Cards.new(:hearts, 1) }]
   end
 
@@ -161,7 +161,7 @@ defmodule GameTest do
     game = Game.perform(game,{:deck , 0, :foundation, 0, {Cards.new(:hearts,1)}})
     game = Game.perform(game,{:deck , 0, :foundation, 1, {Cards.new(:diamonds,3)}})
 
-    errors = Game.validate(game)
+    errors = Game.Debug.validate(game)
     assert errors == [{:foundation_base_mismatch, 1, Cards.new(:diamonds, 3), nil }]
   end
     
