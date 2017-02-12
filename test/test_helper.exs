@@ -27,7 +27,7 @@ defmodule Player do
     if Game.exhausted?(game) do
       if @log > 0 do
         show("Final Game::")
-         Game.pretty_print(game) 
+         Game.Debug.pretty_print(game) 
       end
       game
     else
@@ -53,7 +53,7 @@ defmodule Player do
   defp show(game,moves) do
     if length(moves) > 0 && @log > 0 do
       show("Game::")
-      Game.pretty_print(game)
+      Game.Debug.pretty_print(game)
       IO.inspect(moves,label: "Moves")      
     end
   end

@@ -185,16 +185,6 @@ defmodule Solitaire.Game do
     end
   end
 
-  @spec pretty_print(Game.t) :: :ok
-  @doc "Prints a readable version of the game"
-  def pretty_print({stock,tableaus,foundations}=_game) do
-    IO.inspect stock
-    IO.puts "Tableaus"
-    Enum.each(tableaus,fn(tableau) -> IO.inspect(tableau) end)
-    IO.puts "Foundations"
-    Enum.each(foundations,fn(foundation) -> IO.inspect(foundation) end)
-  end
-
   @spec score(Game.t) :: non_neg_integer
   @doc "Calculate score of game == number of cards moved onto foundations"
   def score({_stock,_tableaus,foundations}=_game) do
