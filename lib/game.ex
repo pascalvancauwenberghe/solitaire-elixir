@@ -49,6 +49,9 @@ defmodule Solitaire.Game do
   @typedoc "Describes moving cards from one location to the other"
   @type move :: {from_location , non_neg_integer , to_location , non_neg_integer, Cards.t }
 
+  @type error_type :: :tableau_mismatch
+  @type validation_error :: { error_type , non_neg_integer , Cards.t , Cards.t }
+
   @spec new(Deck.t) :: Game.t
   @doc "Create a new empty Game"
   def new(deck) do
@@ -56,6 +59,36 @@ defmodule Solitaire.Game do
     foundations = create_foundations()
     deck = Enum.drop(deck,1+2+3+4+5+6+7)
     { Stock.turn(Stock.new(deck)) , tableaus , foundations }
+  end
+
+  @spec validate(Game.t) :: [ validation_error ] 
+  @doc "Validates that the game follows solitaire rules. Returns list of found errors"
+  def validate({_stock,tableaus,_foundations}=_game) do
+    validate_tableaus(tableaus,0)
+  end
+
+  @spec validate_tableaus([Tableau.t],non_neg_integer) :: [ validation_error ] 
+  defp validate_tableaus([],_index), do: []
+
+  defp validate_tableaus([hd|tl],index), do: validate_tableau(Tableau.up(hd),index) ++ validate_tableaus(tl,index+1)
+
+  @spec validate_tableau([Cards.t],non_neg_integer) :: [ validation_error ] 
+  defp validate_tableau([],_index), do: []
+    
+  defp validate_tableau([card|tl],index) do
+    alternating_descending(card,tl,index)
+  end
+
+  @spec alternating_descending(Cards.t,[Cards.t],non_neg_integer) :: [ validation_error ] 
+  defp alternating_descending(_card,[],_index), do: []
+
+  defp alternating_descending(card,[hd|tl],index) do
+    if Cards.colour_of(card) != Cards.colour_of(hd) &&
+       Cards.value_of(card) + 1 == Cards.value_of(hd) do
+      alternating_descending(hd,tl,index)
+    else
+      [ {:tableau_mismatch, index, card, hd } ]
+    end
   end
   
   @spec cards(Game.t) :: [ Cards.t]

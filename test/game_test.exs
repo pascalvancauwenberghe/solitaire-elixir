@@ -114,6 +114,32 @@ defmodule GameTest do
     assert score == 9
   end
 
+  test "A game stays valid when making moves" do
+    deck = Deck.shuffle(Deck.new,1)
+    game = Game.new(deck)
+
+    errors = Game.validate(game)
+    assert errors == []
+
+    moves = Game.possible_moves(game)
+    game = Player.play(game,moves)
+
+    errors = Game.validate(game)
+    assert errors == []
+  end
+
+  test "Detect tableau mismatches" do
+    deck = Deck.shuffle(Deck.new,1)
+    game = Game.new(deck)
+
+    game = Game.perform(game,{:deck , 0, :tableau, 0, {Cards.new(:diamonds,3)}})
+    game = Game.turn(game)
+    game = Game.perform(game,{:deck , 0, :tableau, 3, {Cards.new(:hearts,1)}})
+
+    errors = Game.validate(game)
+    assert errors == [{:tableau_mismatch, 0, Cards.new(:diamonds, 3), Cards.new(:diamonds, 1) },
+                      {:tableau_mismatch, 3, Cards.new(:hearts, 1),   Cards.new(:spades, 1)}]
+  end
     
   defp test_game() do
     deck = Deck.shuffle(Deck.new,1234)
